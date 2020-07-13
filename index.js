@@ -1,12 +1,13 @@
-require('dotenv').config();
-
+require("dotenv").config();
 const puppeteer = require("puppeteer");
 const moment = require("moment");
+const fs = require("fs-extra");
+
 (async () => {
   const browser = await puppeteer.launch({
-    headless: process.env.HEADLESS === 'true' || false,
+    headless: process.env.HEADLESS === "true" || false,
     defaultViewport: null,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
   const page = await browser.newPage();
   await page.goto("https://portal.polinema.ac.id", {
@@ -37,6 +38,7 @@ const moment = require("moment");
   const date = new Date();
   const formattedDate = moment(date).format("YYYYMMDD");
   await page.waitFor(3000);
-  await page.screenshot({ path: formattedDate + ".png" });
+  await fs.mkdirp("logs/");
+  await page.screenshot({ path: "logs/" + formattedDate + ".png" });
   await browser.close();
 })();
