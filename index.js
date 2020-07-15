@@ -43,7 +43,18 @@ const fs = require("fs-extra");
     await page.screenshot({ path: "logs/" + formattedDate + ".png" });
     await browser.close();
   } catch (error) {
-    console.log("error");
+    const browser = await puppeteer.launch({
+      headless: process.env.HEADLESS === "true" || false,
+      defaultViewport: null,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
+    const page = await browser.newPage();
+    await page.goto("https://portal.polinema.ac.id", {
+      waitUntil: "networkidle2",
+    });
+    await fs.mkdirp("logs/");
+    await page.screenshot({ path: "logs/" + formattedDate + "-error.png" });
+    await browser.close();
     process.exit(1);
   }
 })();
