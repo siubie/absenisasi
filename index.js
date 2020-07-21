@@ -1,12 +1,17 @@
 const path = require("path");
-require("dotenv").config({ path: path.resolve(__dirname, './.env') });
+require("dotenv").config({ path: path.resolve(__dirname, "./.env") });
 
 const puppeteer = require("puppeteer");
 const moment = require("moment");
 const fs = require("fs-extra");
-
+const delay = require("delay");
 (async () => {
   try {
+    const time =
+      Math.random() * (process.env.MAX - process.env.MIN) + process.env.MIN;
+    await delay(
+      Math.random() * (process.env.MAX - process.env.MIN) + process.env.MIN
+    );
     const browser = await puppeteer.launch({
       headless: process.env.HEADLESS === "true" || false,
       defaultViewport: null,
